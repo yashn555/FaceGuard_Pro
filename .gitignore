@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# FaceGuard Pro - Sensitive/Generated files
+key.key
+faceguard.db
+daemon.log
+wake_task.xml
+
+# Data directories (generated at runtime)
+photos/
+logs/
+backups/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Configuration (user-specific)
+config.json
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.temp
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE/Editor specific
+*.sublime-workspace
+*.sublime-project
+*.code-workspace

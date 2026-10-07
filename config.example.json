@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "FaceGuard Pro",
+    "version": "1.0.0",
+    "description": "Offline Face Recognition Security System"
+  },
+  "security": {
+    "fallback_password": "CHANGE_ME",
+    "max_attempts": 3,
+    "face_tolerance": 0.6,
+    "shutdown_on_max_attempts": true
+  },
+  "email": {
+    "enabled": true,
+    "sender": "your_email@gmail.com",
+    "password": "your_app_password",
+    "receiver": "your_email@gmail.com",
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587
+  },
+  "paths": {
+    "app_data": "%USERPROFILE%/FaceGuard",
+    "photos": "%USERPROFILE%/FaceGuard/photos",
+    "logs": "%USERPROFILE%/FaceGuard/logs",
+    "backups": "%USERPROFILE%/FaceGuard/backups",
+    "database": "%USERPROFILE%/FaceGuard/faceguard.db",
+    "known_face": "%USERPROFILE%/FaceGuard/photos/known_face.pkl",
+    "encryption_key": "%USERPROFILE%/FaceGuard/key.key"
+  },
+  "dashboard": {
+    "host": "127.0.0.1",
+    "port": 5000,
+    "debug": false
+  },
+  "daemon": {
+    "enabled": true,
+    "listen_events": ["system_wake", "system_sleep", "workstation_lock", "user_logon"],
+    "auto_start": true
+  }
+}

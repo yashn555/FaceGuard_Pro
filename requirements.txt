@@ -1,0 +1,8 @@
+opencv-python==4.8.1.78
+face-recognition
+numpy==1.24.3
+Pillow
+cryptography
+pywin32
+flask
+

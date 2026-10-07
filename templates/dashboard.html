@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceGuard Pro - Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090D16;
+            --bg-card: rgba(18, 26, 43, 0.75);
+            --bg-card-hover: rgba(26, 38, 63, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(0, 245, 160, 0.25);
+            --accent-green: #00F5A0;
+            --accent-green-glow: rgba(0, 245, 160, 0.15);
+            --accent-blue: #00D2FF;
+            --accent-purple: #7B2CBF;
+            --accent-red: #FF3366;
+            --accent-red-glow: rgba(255, 51, 102, 0.15);
+            --accent-warning: #FFB703;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 245, 160, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(123, 44, 191, 0.07) 0%, transparent 40%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: rgba(13, 19, 33, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(0, 245, 160, 0.3);
+        }
+
+        .brand-title h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #FFFFFF, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-title span {
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 245, 160, 0.08);
+            border: 1px solid rgba(0, 245, 160, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-green), #00D2FF);
+            color: #090D16;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 245, 160, 0.25);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 20px rgba(0, 245, 160, 0.35);
+        }
+
+        .btn-danger {
+            background: var(--accent-red-glow);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            color: var(--accent-red);
+        }
+
+        .btn-danger:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .container {
+            max-width: 1350px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-green);
+            background: var(--accent-green-glow);
+            border: 1px solid rgba(0, 245, 160, 0.2);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .metric-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .metric-card.total::before { background: var(--accent-blue); }
+        .metric-card.success::before { background: var(--accent-green); }
+        .metric-card.failed::before { background: var(--accent-red); }
+        .metric-card.friends::before { background: var(--accent-purple); }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .metric-title {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-icon {
+            font-size: 1.4rem;
+        }
+
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: var(--text-main);
+        }
+
+        .metric-subtext {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .panel-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            background: rgba(9, 13, 22, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            width: 240px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px rgba(0, 245, 160, 0.15);
+        }
+
+        .filter-btn-group {
+            display: flex;
+            background: rgba(9, 13, 22, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(9, 13, 22, 0.4);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .timestamp-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .pill-success {
+            background: rgba(0, 245, 160, 0.12);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 245, 160, 0.25);
+        }
+
+        .pill-failed {
+            background: rgba(255, 51, 102, 0.12);
+            color: var(--accent-red);
+            border: 1px solid rgba(255, 51, 102, 0.25);
+        }
+
+        .pill-purple {
+            background: rgba(123, 44, 191, 0.15);
+            color: #C77DFF;
+            border: 1px solid rgba(123, 44, 191, 0.3);
+        }
+
+        .user-identity {
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .photo-thumb-btn {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .photo-thumb-btn:hover {
+            background: var(--accent-blue);
+            color: #090D16;
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .friend-card {
+            background: rgba(18, 26, 43, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: all 0.25s;
+        }
+
+        .friend-card:hover {
+            border-color: rgba(0, 245, 160, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .friend-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-green);
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(0, 245, 160, 0.2);
+            background: #1a2336;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .friend-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .friend-role {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .friend-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 8, 14, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-content {
+            background: #121A2B;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            padding: 1.75rem;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: white;
+            background: var(--accent-red);
+        }
+
+        .modal-body {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 380px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .modal-meta {
+            text-align: left;
+            background: rgba(9, 13, 22, 0.6);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(9, 13, 22, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-green);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-green);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="brand">
+            <div class="brand-icon">🛡️</div>
+            <div class="brand-title">
+                <h1>FaceGuard Pro</h1>
+                <span>Security Console</span>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span id="daemon-status-text">Daemon Active</span>
+            </div>
+            <button class="btn btn-danger" onclick="triggerSystemLock()">🔒 Lock PC Now</button>
+            <button class="btn" onclick="fetchData()">🔄 Refresh</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overview', this)">📊 Overview & Access Logs</button>
+            <button class="tab-btn" onclick="switchTab('friends', this)">👥 Friend Access Manager</button>
+            <button class="tab-btn" onclick="switchTab('settings', this)">⚙️ Live Settings & Rules</button>
+        </div>
+
+        <!-- TAB 1: OVERVIEW & ACCESS LOGS -->
+        <div id="tab-overview" class="tab-content active">
+            
+            <!-- Metric Cards Row -->
+            <div class="metrics-grid">
+                <div class="metric-card total">
+                    <div class="metric-header">
+                        <span class="metric-title">Total Access Events</span>
+                        <span class="metric-icon">📋</span>
+                    </div>
+                    <div class="metric-value" id="stat-total-logs">0</div>
+                    <div class="metric-subtext">Captured logs & scans</div>
+                </div>
+
+                <div class="metric-card success">
+                    <div class="metric-header">
+                        <span class="metric-title">Owner & Friend Unlocks</span>
+                        <span class="metric-icon">✅</span>
+                    </div>
+                    <div class="metric-value" id="stat-successful-unlocks">0</div>
+                    <div class="metric-subtext">Authorized face & pass unlocks</div>
+                </div>
+
+                <div class="metric-card failed">
+                    <div class="metric-header">
+                        <span class="metric-title">Intruder Alerts</span>
+                        <span class="metric-icon">🚨</span>
+                    </div>
+                    <div class="metric-value" id="stat-unauthorized-attempts">0</div>
+                    <div class="metric-subtext">Unrecognized face attempts</div>
+                </div>
+
+                <div class="metric-card friends">
+                    <div class="metric-header">
+                        <span class="metric-title">Registered Access Users</span>
+                        <span class="metric-icon">👥</span>
+                    </div>
+                    <div class="metric-value" id="stat-friends-count">0</div>
+                    <div class="metric-subtext">Owner + Trusted friends</div>
+                </div>
+            </div>
+
+            <!-- Activity Log Panel -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>🕵️ Access Activity Logs</span>
+                    </div>
+                    <div class="controls-row">
+                        <input type="text" id="log-search" class="search-box" placeholder="Search logs..." oninput="filterLogs()">
+                        
+                        <div class="filter-btn-group">
+                            <button class="filter-btn active" onclick="setLogFilter('all', this)">All</button>
+                            <button class="filter-btn" onclick="setLogFilter('success', this)">Success</button>
+                            <button class="filter-btn" onclick="setLogFilter('failed', this)">Intruders</button>
+                            <button class="filter-btn" onclick="setLogFilter('password', this)">Password</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Event</th>
+                                <th>Status</th>
+                                <th>Identity / Details</th>
+                                <th>Attempts</th>
+                                <th>Camera Capture</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <div class="empty-state-icon">⏳</div>
+                                    <p>Loading activity logs...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: FRIEND ACCESS MANAGER -->
+        <div id="tab-friends" class="tab-content">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">👥 Authorized Laptop Access</div>
+                        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+                            Register trusted friends or family members so FaceGuard recognizes them when opening your laptop.
+                        </p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddFriendModal()">➕ Add Friend Access</button>
+                </div>
+
+                <div class="friends-grid" id="friends-grid">
+                    <!-- Friends cards rendered dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: SYSTEM INFO & SECURITY SETTINGS -->
+        <div id="tab-settings" class="tab-content">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">⚙️ Live Configuration & Security Settings</div>
+                        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+                            All settings are saved dynamically into your database. No hardcoded constants used.
+                        </p>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveSettings(event)">💾 Save Settings</button>
+                </div>
+
+                <form id="settings-form" onsubmit="saveSettings(event)">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                        
+                        <!-- System Context -->
+                        <div style="background: rgba(9,13,22,0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--border-color);">
+                            <h3 style="font-size: 1rem; color: var(--accent-green); margin-bottom: 16px;">💻 System Context Info</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Computer Name:</strong> <span id="sys-computer" style="color: var(--accent-green); font-family: 'JetBrains Mono', monospace;">-</span></p>
+                            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Windows User:</strong> <span id="sys-user" style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace;">-</span></p>
+                            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Local IP Address:</strong> <span id="sys-ip" style="color: var(--accent-purple); font-family: 'JetBrains Mono', monospace;">-</span></p>
+
+                            <div class="form-group" style="margin-top: 1.5rem;">
+                                <label for="setting-fallback-password">🔑 Fallback Unlock Password</label>
+                                <input type="password" id="setting-fallback-password" name="fallback_password" class="form-control" placeholder="Enter fallback unlock password" required>
+                                <label style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; display: flex; align-items: center; gap: 6px;">
+                                    <input type="checkbox" onchange="togglePasswordVisibility('setting-fallback-password')"> Show Password
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Protection Rules -->
+                        <div style="background: rgba(9,13,22,0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--border-color);">
+                            <h3 style="font-size: 1rem; color: var(--accent-blue); margin-bottom: 16px;">🚨 Security & Shutdown Rules</h3>
+
+                            <div class="form-group">
+                                <label for="setting-max-attempts">🛑 Max Wrong Attempts Before Shutdown</label>
+                                <input type="number" id="setting-max-attempts" name="max_attempts" class="form-control" min="1" max="10" value="3" required>
+                                <span style="font-size: 0.75rem; color: var(--text-dim);">Triggers automatic PC shutdown after this many failed attempts.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="setting-face-tolerance">🎯 Face Match Sensitivity (Tolerance: <span id="tolerance-val">0.60</span>)</label>
+                                <input type="range" id="setting-face-tolerance" name="face_tolerance" min="0.40" max="0.75" step="0.01" value="0.60" class="form-control" oninput="document.getElementById('tolerance-val').textContent = parseFloat(this.value).toFixed(2)">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">
+                                    <span>Strict (0.45)</span>
+                                    <span>Balanced (0.60)</span>
+                                    <span>Lenient (0.70)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Credentials -->
+                        <div style="background: rgba(9,13,22,0.6); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--border-color); grid-column: 1 / -1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h3 style="font-size: 1rem; color: var(--accent-warning);">📧 Gmail Security Alert Configuration</h3>
+                                <button type="button" class="btn" onclick="testEmailAlert(event)">✉️ Test Email Connection</button>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                                <div class="form-group">
+                                    <label for="setting-email-sender">Sender Gmail Address</label>
+                                    <input type="email" id="setting-email-sender" name="email_sender" class="form-control" placeholder="yourgmail@gmail.com">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="setting-email-password">Gmail App Password</label>
+                                    <input type="password" id="setting-email-password" name="email_password" class="form-control" placeholder="16-character App password">
+                                    <label style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; display: flex; align-items: center; gap: 6px;">
+                                        <input type="checkbox" onchange="togglePasswordVisibility('setting-email-password')"> Show App Password
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="setting-email-receiver">Alert Receiver Email</label>
+                                    <input type="email" id="setting-email-receiver" name="email_receiver" class="form-control" placeholder="receiver@gmail.com">
+                                </div>
+                            </div>
+                            <p id="test-email-status" style="font-size: 0.85rem; margin-top: 8px; font-weight: 500;"></p>
+                        </div>
+
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-size: 1rem;">💾 Save Configuration</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PHOTO LIGHTBOX MODAL -->
+    <div id="photo-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('photo-modal')">✕</button>
+            <h3 style="font-size: 1.1rem; margin-bottom: 12px;" id="modal-photo-title">Captured Photo Inspection</h3>
+            <div class="modal-body">
+                <img id="modal-photo-img" class="modal-img" src="" alt="Captured Image">
+                <div class="modal-meta">
+                    <div><strong>Time:</strong> <span id="meta-time">-</span></div>
+                    <div><strong>Event:</strong> <span id="meta-event">-</span></div>
+                    <div><strong>Status:</strong> <span id="meta-status">-</span></div>
+                    <div><strong>Notes:</strong> <span id="meta-notes">-</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD FRIEND MODAL -->
+    <div id="add-friend-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('add-friend-modal')">✕</button>
+            <h3 style="font-size: 1.2rem; margin-bottom: 16px;">➕ Register New Friend Face Access</h3>
+            <form id="add-friend-form" onsubmit="submitAddFriend(event)">
+                <div class="form-group">
+                    <label for="friend-name">Friend / Member Name</label>
+                    <input type="text" id="friend-name" class="form-control" placeholder="e.g. Alex, Rahul" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="friend-role">Access Role</label>
+                    <select id="friend-role" class="form-control" required>
+                        <option value="friend">Friend</option>
+                        <option value="family">Family Member</option>
+                        <option value="guest">Guest</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Friend Photo Source</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <button type="button" class="btn" id="btn-mode-file" onclick="setPhotoMode('file')" style="flex:1;">📁 Upload Photo File</button>
+                        <button type="button" class="btn" id="btn-mode-cam" onclick="setPhotoMode('cam')" style="flex:1;">📸 Capture via Webcam</button>
+                    </div>
+
+                    <div id="mode-file-input">
+                        <input type="file" id="friend-photo-file" class="form-control" accept="image/*">
+                    </div>
+
+                    <div id="mode-cam-input" style="display: none; text-align: center;">
+                        <video id="webcam-preview" style="width: 100%; max-height: 240px; border-radius: 10px; background: #000;" autoplay></video>
+                        <button type="button" class="btn btn-primary" onclick="captureWebcamSnapshot()" style="margin-top: 8px;">📸 Take Snapshot</button>
+                        <canvas id="webcam-canvas" style="display: none;"></canvas>
+                        <input type="hidden" id="friend-photo-base64">
+                        <p id="cam-snap-status" style="font-size: 0.8rem; color: var(--accent-green); margin-top: 4px;"></p>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
+                    <button type="button" class="btn" onclick="closeModal('add-friend-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-submit-friend">Save & Enable Access</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let allLogs = [];
+        let currentFilter = 'all';
+        let webcamStream = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+            fetchSettings();
+            setInterval(fetchData, 5000);
+        });
+
+        function switchTab(tabName, btnEl) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (btnEl) btnEl.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        async function fetchData() {
+            try {
+                // Fetch stats
+                const statsRes = await fetch('/api/stats');
+                const stats = await statsRes.json();
+                
+                document.getElementById('stat-total-logs').textContent = stats.total_logs || 0;
+                document.getElementById('stat-successful-unlocks').textContent = stats.successful_unlocks || 0;
+                document.getElementById('stat-unauthorized-attempts').textContent = stats.unauthorized_attempts || 0;
+                document.getElementById('stat-friends-count').textContent = stats.friends_count || 0;
+
+                document.getElementById('sys-computer').textContent = stats.computer_name || 'PC';
+                document.getElementById('sys-user').textContent = stats.username || 'User';
+                document.getElementById('sys-ip').textContent = stats.ip_address || '127.0.0.1';
+
+                // Fetch logs
+                const logsRes = await fetch('/api/logs');
+                const logsData = await logsRes.json();
+                allLogs = logsData.logs || [];
+                renderLogs();
+
+                // Fetch friends
+                const friendsRes = await fetch('/api/friends');
+                const friendsData = await friendsRes.json();
+                renderFriends(friendsData.friends || []);
+
+            } catch (err) {
+                console.error('Error fetching dashboard data:', err);
+            }
+        }
+
+        async function fetchSettings() {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.success && data.settings) {
+                    const s = data.settings;
+                    if (s.fallback_password) document.getElementById('setting-fallback-password').value = s.fallback_password;
+                    if (s.email_sender) document.getElementById('setting-email-sender').value = s.email_sender;
+                    if (s.email_password) document.getElementById('setting-email-password').value = s.email_password;
+                    if (s.email_receiver) document.getElementById('setting-email-receiver').value = s.email_receiver;
+                    if (s.max_attempts) document.getElementById('setting-max-attempts').value = s.max_attempts;
+                    if (s.face_tolerance) {
+                        document.getElementById('setting-face-tolerance').value = s.face_tolerance;
+                        document.getElementById('tolerance-val').textContent = parseFloat(s.face_tolerance).toFixed(2);
+                    }
+                }
+            } catch(e) {
+                console.error('Error fetching settings:', e);
+            }
+        }
+
+        async function saveSettings(e) {
+            if (e) e.preventDefault();
+            const form = document.getElementById('settings-form');
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((val, key) => data[key] = val);
+
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('✅ Settings saved dynamically to database!');
+                    fetchSettings();
+                } else {
+                    alert('❌ Failed to save settings: ' + result.error);
+                }
+            } catch(e) {
+                alert('Error saving settings: ' + e.message);
+            }
+        }
+
+        async function testEmailAlert(e) {
+            e.preventDefault();
+            const statusEl = document.getElementById('test-email-status');
+            statusEl.style.color = 'var(--accent-warning)';
+            statusEl.textContent = '⏳ Sending test email...';
+
+            try {
+                const res = await fetch('/api/test-email', { method: 'POST' });
+                const result = await res.json();
+                if (result.success) {
+                    statusEl.style.color = 'var(--accent-green)';
+                    statusEl.textContent = '✅ ' + result.message;
+                } else {
+                    statusEl.style.color = 'var(--accent-red)';
+                    statusEl.textContent = '❌ Error: ' + result.error;
+                }
+            } catch(e) {
+                statusEl.style.color = 'var(--accent-red)';
+                statusEl.textContent = '❌ Connection error: ' + e.message;
+            }
+        }
+
+        function togglePasswordVisibility(id) {
+            const el = document.getElementById(id);
+            if (el.type === 'password') {
+                el.type = 'text';
+            } else {
+                el.type = 'password';
+            }
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('logs-table-body');
+            const searchVal = document.getElementById('log-search').value.toLowerCase();
+
+            const filtered = allLogs.filter(log => {
+                const matchesFilter = 
+                    currentFilter === 'all' ? true :
+                    currentFilter === 'success' ? (log.status === 'success' || log.status === 'unlocked') :
+                    currentFilter === 'failed' ? (log.status === 'failed' || log.event_type === 'unauthorized' || log.status === 'shutdown') :
+                    currentFilter === 'password' ? (log.event_type === 'password') : true;
+
+                const matchesSearch = 
+                    !searchVal || 
+                    (log.notes && log.notes.toLowerCase().includes(searchVal)) ||
+                    (log.event_type && log.event_type.toLowerCase().includes(searchVal)) ||
+                    (log.timestamp && log.timestamp.toLowerCase().includes(searchVal));
+
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p>No activity logs match your criteria.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(log => {
+                const isSuccess = log.status === 'success' || log.status === 'unlocked';
+                const isFailed = log.status === 'failed' || log.status === 'shutdown' || log.event_type === 'unauthorized';
+                const statusPillClass = isSuccess ? 'pill-success' : (isFailed ? 'pill-failed' : 'pill-purple');
+                
+                const formattedTime = log.timestamp ? log.timestamp.replace('T', ' ').substring(0, 19) : '-';
+                const hasPhoto = log.photo_path && log.photo_path.trim().length > 0;
+                
+                return `
+                    <tr>
+                        <td class="timestamp-cell">${formattedTime}</td>
+                        <td style="font-weight: 500; text-transform: uppercase; font-size: 0.8rem;">${log.event_type}</td>
+                        <td><span class="pill ${statusPillClass}">${log.status}</span></td>
+                        <td><div class="user-identity">${log.notes || 'Routine check'}</div></td>
+                        <td style="text-align: center; font-weight: 600;">${log.attempts || 0}</td>
+                        <td>
+                            ${hasPhoto ? `<button class="photo-thumb-btn" onclick="openPhotoModal('${log.photo_path}', '${formattedTime}', '${log.event_type}', '${log.status}', '${(log.notes || '').replace(/'/g, "\\'")}')">📸 View Photo</button>` : '<span style="color: var(--text-dim); font-size: 0.8rem;">No Photo</span>'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setLogFilter(filter, btnEl) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnEl.classList.add('active');
+            renderLogs();
+        }
+
+        function filterLogs() {
+            renderLogs();
+        }
+
+        function renderFriends(friends) {
+            const grid = document.getElementById('friends-grid');
+            if (friends.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">👤</div>
+                        <p>No registered friends yet. Click "Add Friend Access" to register trusted users!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = friends.map(f => {
+                const avatarSrc = f.photo_path ? `/api/photos/${encodeURIComponent(f.photo_path)}` : '';
+                const isOwner = f.role === 'owner';
+                
+                return `
+                    <div class="friend-card">
+                        ${avatarSrc ? `<img src="${avatarSrc}" class="friend-avatar" alt="${f.name}">` : `<div class="friend-avatar">👤</div>`}
+                        <div class="friend-name">${f.name}</div>
+                        <div class="friend-role">${f.role}</div>
+                        <div class="friend-actions">
+                            ${!isOwner ? `
+                                <label class="switch">
+                                    <input type="checkbox" ${f.is_active ? 'checked' : ''} onchange="toggleFriendAccess(${f.id}, this.checked)">
+                                    <span class="slider"></span>
+                                </label>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">${f.is_active ? 'Active' : 'Disabled'}</span>
+                                <button class="btn btn-danger" style="margin-left: auto; padding: 4px 8px; font-size: 0.78rem;" onclick="deleteFriend(${f.id}, '${f.name}')">🗑️</button>
+                            ` : `<span style="font-size: 0.8rem; color: var(--accent-green); font-weight: 600;">👑 Owner Profile</span>`}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function toggleFriendAccess(id, isActive) {
+            try {
+                await fetch('/api/friends/toggle', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ id: id, is_active: isActive ? 1 : 0 })
+                });
+                fetchData();
+            } catch(e) {
+                console.error('Error toggling friend access:', e);
+            }
+        }
+
+        async function deleteFriend(id, name) {
+            if (!confirm(`Are you sure you want to remove access for "${name}"?`)) return;
+            try {
+                await fetch(`/api/friends/${id}`, { method: 'DELETE' });
+                fetchData();
+            } catch(e) {
+                console.error('Error deleting friend:', e);
+            }
+        }
+
+        function openPhotoModal(path, time, event, status, notes) {
+            document.getElementById('modal-photo-img').src = `/api/photos/${encodeURIComponent(path)}`;
+            document.getElementById('meta-time').textContent = time;
+            document.getElementById('meta-event').textContent = event;
+            document.getElementById('meta-status').textContent = status;
+            document.getElementById('meta-notes').textContent = notes;
+            document.getElementById('photo-modal').classList.add('active');
+        }
+
+        function openAddFriendModal() {
+            document.getElementById('add-friend-modal').classList.add('active');
+            setPhotoMode('file');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            stopWebcam();
+        }
+
+        function setPhotoMode(mode) {
+            const fileDiv = document.getElementById('mode-file-input');
+            const camDiv = document.getElementById('mode-cam-input');
+            if (mode === 'file') {
+                fileDiv.style.display = 'block';
+                camDiv.style.display = 'none';
+                stopWebcam();
+            } else {
+                fileDiv.style.display = 'none';
+                camDiv.style.display = 'block';
+                startWebcam();
+            }
+        }
+
+        async function startWebcam() {
+            try {
+                const video = document.getElementById('webcam-preview');
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = webcamStream;
+            } catch (err) {
+                alert('Could not access webcam from browser: ' + err.message);
+            }
+        }
+
+        function stopWebcam() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+        }
+
+        function captureWebcamSnapshot() {
+            const video = document.getElementById('webcam-preview');
+            const canvas = document.getElementById('webcam-canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg');
+            document.getElementById('friend-photo-base64').value = dataUrl;
+            document.getElementById('cam-snap-status').textContent = '✅ Snapshot captured!';
+        }
+
+        async function submitAddFriend(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-friend');
+            btn.disabled = true;
+            btn.textContent = 'Processing face...';
+
+            const name = document.getElementById('friend-name').value.trim();
+            const role = document.getElementById('friend-role').value;
+            const fileInput = document.getElementById('friend-photo-file');
+            const base64Input = document.getElementById('friend-photo-base64').value;
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('role', role);
+
+            if (fileInput.files.length > 0) {
+                formData.append('photo', fileInput.files[0]);
+            } else if (base64Input) {
+                formData.append('photo_base64', base64Input);
+            } else {
+                alert('Please upload a photo file or take a webcam snapshot!');
+                btn.disabled = false;
+                btn.textContent = 'Save & Enable Access';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/friends/add', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('✅ Friend access registered successfully!');
+                    closeModal('add-friend-modal');
+                    fetchData();
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Failed to detect face'));
+                }
+            } catch (err) {
+                alert('Error submitting friend profile: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Save & Enable Access';
+            }
+        }
+
+        async function triggerSystemLock() {
+            if (confirm('Lock workstation now?')) {
+                await fetch('/api/lock', { method: 'POST' });
+            }
+        }
+    </script>
+</body>
+</html>
